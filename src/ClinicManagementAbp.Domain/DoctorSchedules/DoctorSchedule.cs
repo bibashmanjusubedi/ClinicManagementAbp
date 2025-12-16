@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Domain.Entities;
-using ClinicManagementAbp.Doctors;  // import Doctor entity
+using ClinicManagementAbp.Doctors;
 
 namespace ClinicManagementAbp.DoctorSchedules
 {

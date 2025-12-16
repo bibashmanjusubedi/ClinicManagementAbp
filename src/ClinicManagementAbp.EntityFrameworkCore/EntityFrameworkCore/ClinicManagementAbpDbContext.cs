@@ -1,3 +1,7 @@
+using ClinicManagementAbp.Appointments;
+using ClinicManagementAbp.Doctors;
+using ClinicManagementAbp.DoctorSchedules;
+using ClinicManagementAbp.Patients;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
@@ -9,11 +13,12 @@ using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
+using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
-using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+
 
 namespace ClinicManagementAbp.EntityFrameworkCore;
 
@@ -26,6 +31,10 @@ public class ClinicManagementAbpDbContext :
     IIdentityDbContext
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
+    public DbSet<Patient> Patients { get; set; }
+    public DbSet<Doctor> Doctors { get; set; }
+    public DbSet<Appointment> Appointments { get; set; }
+    public DbSet<DoctorSchedule> DoctorSchedules { get; set; }
 
 
     #region Entities from the modules
@@ -78,7 +87,7 @@ public class ClinicManagementAbpDbContext :
         builder.ConfigureOpenIddict();
         builder.ConfigureTenantManagement();
         builder.ConfigureBlobStoring();
-        
+
         /* Configure your own tables/entities inside here */
 
         //builder.Entity<YourEntity>(b =>
@@ -87,5 +96,33 @@ public class ClinicManagementAbpDbContext :
         //    b.ConfigureByConvention(); //auto configure for the base class props
         //    //...
         //});
+
+        builder.Entity<Patient>(b =>
+        {
+            b.ToTable(ClinicManagementAbpConsts.DbTablePrefix + "Patients",
+                      ClinicManagementAbpConsts.DbSchema);
+            b.ConfigureByConvention();
+        });
+
+        builder.Entity<Doctor>(b =>
+        {
+            b.ToTable(ClinicManagementAbpConsts.DbTablePrefix + "Doctors",
+                      ClinicManagementAbpConsts.DbSchema);
+            b.ConfigureByConvention();
+        });
+
+        builder.Entity<Appointment>(b =>
+        {
+            b.ToTable(ClinicManagementAbpConsts.DbTablePrefix + "Appointments",
+                      ClinicManagementAbpConsts.DbSchema);
+            b.ConfigureByConvention();
+        });
+
+        builder.Entity<DoctorSchedule>(b =>
+        {
+            b.ToTable(ClinicManagementAbpConsts.DbTablePrefix + "DoctorSchedules",
+                      ClinicManagementAbpConsts.DbSchema);
+            b.ConfigureByConvention();
+        });
     }
 }

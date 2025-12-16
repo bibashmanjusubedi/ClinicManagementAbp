@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Patients\qwvc4r4a.qpo~" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ClinicManagementAbp.Domain.Shared\ClinicManagementAbp.Domain.Shared.csproj" />
   </ItemGroup>
 

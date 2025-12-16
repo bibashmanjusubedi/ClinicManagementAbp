@@ -32,7 +32,7 @@ namespace ClinicManagementAbp.Patients
         /// Navigation property for the appointments related to this patient.
         /// Represents a collection of appointments that belong to the patient.
         /// </summary>
-        public ICollection<Appointment> Appointments { get; set; } = Appointments = new List<Appointment>();
+        public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
     }
 }
