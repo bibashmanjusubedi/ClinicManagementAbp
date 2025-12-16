@@ -1,0 +1,9 @@
+﻿using ClinicManagementAbp.EntityFrameworkCore;
+using Xunit;
+
+namespace ClinicManagementAbp.EntityFrameworkCore;
+
+public class ClinicManagementAbpEntityFrameworkCoreCollectionFixtureBase : ICollectionFixture<ClinicManagementAbpEntityFrameworkCoreFixture>
+{
+
+}

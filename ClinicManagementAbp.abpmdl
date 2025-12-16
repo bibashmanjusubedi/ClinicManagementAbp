@@ -1,0 +1,109 @@
+{
+  "template": "app",
+  "imports": {
+    "Volo.Abp.LeptonXLiteTheme": {
+      "version": "5.0.1",
+      "isInstalled": true,
+      "creationTime": "12/16/2025 07:38:45 +00:00"
+    },
+    "Volo.Abp.Account": {
+      "version": "10.0.1",
+      "isInstalled": true,
+      "creationTime": "12/16/2025 07:38:45 +00:00"
+    },
+    "Volo.Abp.OpenIddict": {
+      "version": "10.0.1",
+      "isInstalled": true,
+      "creationTime": "12/16/2025 07:38:45 +00:00"
+    },
+    "Volo.Abp.Identity": {
+      "version": "10.0.1",
+      "isInstalled": true,
+      "creationTime": "12/16/2025 07:38:45 +00:00"
+    },
+    "Volo.Abp.TenantManagement": {
+      "version": "10.0.1",
+      "isInstalled": true,
+      "creationTime": "12/16/2025 07:38:45 +00:00"
+    },
+    "Volo.Abp.SettingManagement": {
+      "version": "10.0.1",
+      "isInstalled": true,
+      "creationTime": "12/16/2025 07:38:45 +00:00"
+    },
+    "Volo.Abp.PermissionManagement": {
+      "version": "10.0.1",
+      "isInstalled": true,
+      "creationTime": "12/16/2025 07:38:45 +00:00"
+    },
+    "Volo.Abp.FeatureManagement": {
+      "version": "10.0.1",
+      "isInstalled": true,
+      "creationTime": "12/16/2025 07:38:45 +00:00"
+    }
+  },
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {}
+    }
+  },
+  "packages": {
+    "ClinicManagementAbp.Application": {
+      "path": "src/ClinicManagementAbp.Application/ClinicManagementAbp.Application.abppkg",
+      "folder": "src"
+    },
+    "ClinicManagementAbp.Application.Tests": {
+      "path": "test/ClinicManagementAbp.Application.Tests/ClinicManagementAbp.Application.Tests.abppkg",
+      "folder": "test"
+    },
+    "ClinicManagementAbp.Domain.Shared": {
+      "path": "src/ClinicManagementAbp.Domain.Shared/ClinicManagementAbp.Domain.Shared.abppkg",
+      "folder": "src"
+    },
+    "ClinicManagementAbp.Application.Contracts": {
+      "path": "src/ClinicManagementAbp.Application.Contracts/ClinicManagementAbp.Application.Contracts.abppkg",
+      "folder": "src"
+    },
+    "ClinicManagementAbp.HttpApi": {
+      "path": "src/ClinicManagementAbp.HttpApi/ClinicManagementAbp.HttpApi.abppkg",
+      "folder": "src"
+    },
+    "ClinicManagementAbp.HttpApi.Client": {
+      "path": "src/ClinicManagementAbp.HttpApi.Client/ClinicManagementAbp.HttpApi.Client.abppkg",
+      "folder": "src"
+    },
+    "ClinicManagementAbp.EntityFrameworkCore.Tests": {
+      "path": "test/ClinicManagementAbp.EntityFrameworkCore.Tests/ClinicManagementAbp.EntityFrameworkCore.Tests.abppkg",
+      "folder": "test"
+    },
+    "ClinicManagementAbp.EntityFrameworkCore": {
+      "path": "src/ClinicManagementAbp.EntityFrameworkCore/ClinicManagementAbp.EntityFrameworkCore.abppkg",
+      "folder": "src"
+    },
+    "ClinicManagementAbp.TestBase": {
+      "path": "test/ClinicManagementAbp.TestBase/ClinicManagementAbp.TestBase.abppkg",
+      "folder": "test"
+    },
+    "ClinicManagementAbp.Domain.Tests": {
+      "path": "test/ClinicManagementAbp.Domain.Tests/ClinicManagementAbp.Domain.Tests.abppkg",
+      "folder": "test"
+    },
+    "ClinicManagementAbp.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/ClinicManagementAbp.HttpApi.Client.ConsoleTestApp/ClinicManagementAbp.HttpApi.Client.ConsoleTestApp.abppkg",
+      "folder": "test"
+    },
+    "ClinicManagementAbp.DbMigrator": {
+      "path": "src/ClinicManagementAbp.DbMigrator/ClinicManagementAbp.DbMigrator.abppkg",
+      "folder": "src"
+    },
+    "ClinicManagementAbp.HttpApi.Host": {
+      "path": "src/ClinicManagementAbp.HttpApi.Host/ClinicManagementAbp.HttpApi.Host.abppkg",
+      "folder": "src"
+    },
+    "ClinicManagementAbp.Domain": {
+      "path": "src/ClinicManagementAbp.Domain/ClinicManagementAbp.Domain.abppkg",
+      "folder": "src"
+    }
+  }
+}

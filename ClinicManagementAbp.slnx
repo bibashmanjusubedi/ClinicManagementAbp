@@ -1,0 +1,23 @@
+<Solution>
+    <Configurations>
+        <Platform Name="Any CPU" />
+    </Configurations>
+    <Folder Name="/src/">
+        <Project Path="src/ClinicManagementAbp.Domain/ClinicManagementAbp.Domain.csproj" />
+        <Project Path="src/ClinicManagementAbp.Application/ClinicManagementAbp.Application.csproj" />
+        <Project Path="src/ClinicManagementAbp.EntityFrameworkCore/ClinicManagementAbp.EntityFrameworkCore.csproj" />
+        <Project Path="src/ClinicManagementAbp.Domain.Shared/ClinicManagementAbp.Domain.Shared.csproj" />
+        <Project Path="src/ClinicManagementAbp.Application.Contracts/ClinicManagementAbp.Application.Contracts.csproj" />
+        <Project Path="src/ClinicManagementAbp.HttpApi/ClinicManagementAbp.HttpApi.csproj" />
+        <Project Path="src/ClinicManagementAbp.HttpApi.Client/ClinicManagementAbp.HttpApi.Client.csproj" />
+        <Project Path="src/ClinicManagementAbp.DbMigrator/ClinicManagementAbp.DbMigrator.csproj" />
+        <Project Path="src/ClinicManagementAbp.HttpApi.Host/ClinicManagementAbp.HttpApi.Host.csproj" />
+    </Folder>
+    <Folder Name="/test/">
+        <Project Path="test/ClinicManagementAbp.Application.Tests/ClinicManagementAbp.Application.Tests.csproj" />
+        <Project Path="test/ClinicManagementAbp.EntityFrameworkCore.Tests/ClinicManagementAbp.EntityFrameworkCore.Tests.csproj" />
+        <Project Path="test/ClinicManagementAbp.TestBase/ClinicManagementAbp.TestBase.csproj" />
+        <Project Path="test/ClinicManagementAbp.Domain.Tests/ClinicManagementAbp.Domain.Tests.csproj" />
+        <Project Path="test/ClinicManagementAbp.HttpApi.Client.ConsoleTestApp/ClinicManagementAbp.HttpApi.Client.ConsoleTestApp.csproj" />
+    </Folder>
+</Solution>

@@ -1,0 +1,9 @@
+﻿using Xunit;
+
+namespace ClinicManagementAbp.EntityFrameworkCore;
+
+[CollectionDefinition(ClinicManagementAbpTestConsts.CollectionDefinitionName)]
+public class ClinicManagementAbpEntityFrameworkCoreCollection : ICollectionFixture<ClinicManagementAbpEntityFrameworkCoreFixture>
+{
+
+}
