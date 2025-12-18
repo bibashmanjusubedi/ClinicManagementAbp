@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Appointments\IAppointmentAppService.cs~RFabbaf3.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ClinicManagementAbp.Domain.Shared\ClinicManagementAbp.Domain.Shared.csproj" />
   </ItemGroup>
   
