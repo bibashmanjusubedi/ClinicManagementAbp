@@ -1,0 +1,11 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ClinicManagementAbp.Appointments.Dtos
+{
+    public class AppointmentCancelDto
+    {
+        [Required]
+        [MaxLength(500)]
+        public string CancellationReason { get; set; }
+    }
+}
