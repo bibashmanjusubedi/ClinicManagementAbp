@@ -2,7 +2,7 @@
 
 namespace ClinicManagementAbp.Appointments.Dtos
 {
-    public class AppointmentCancelDto
+    public class CancelAppointmentDto
     {
         [Required]
         [MaxLength(500)]
