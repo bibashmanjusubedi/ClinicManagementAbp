@@ -13,6 +13,7 @@ using Volo.Abp.Linq;
 
 
 
+
 namespace ClinicManagementAbp.Patients
 {
     public class PatientAppService:
@@ -29,11 +30,11 @@ namespace ClinicManagementAbp.Patients
             _patientRepository = patientRepository;
         }
 
-        // override standard delete
-        public override async Task DeleteAsync(Guid id)
-        {
-            await _patientRepository.SoftDeleteAsync(id);
-        }
+        //// override standard delete
+        //public override async Task DeleteAsync(Guid id)
+        //{
+        //    await _patientRepository.SoftDeleteAsync(id);
+        //}
 
         public async Task SoftDeleteAsync(Guid id)
         {
@@ -45,12 +46,12 @@ namespace ClinicManagementAbp.Patients
         {
             var queryable = await _patientRepository.WithDetailsAsync();
 
+            var totalCount = await AsyncExecuter.CountAsync(queryable);
+
 
             queryable = ApplySorting(queryable, input);
             queryable = ApplyPaging(queryable, input);
 
-
-            var totalCount = await AsyncExecuter.CountAsync(queryable);
 
 
             var entities = await AsyncExecuter.ToListAsync(queryable);

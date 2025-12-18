@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Domain.Entities;
 using ClinicManagementAbp.Appointments;
+using Volo.Abp;
 
 namespace ClinicManagementAbp.Patients
 {
@@ -10,7 +11,7 @@ namespace ClinicManagementAbp.Patients
     /// Represents a patient in the clinic management system.
     /// Contains personal and contact details along with related appointments.
     /// </summary>
-    public class Patient : AggregateRoot<Guid>
+    public class Patient : AggregateRoot<Guid>, ISoftDelete
     {
         [Required, MaxLength(100)]
         public string FirstName { get; set; }
@@ -26,7 +27,7 @@ namespace ClinicManagementAbp.Patients
 
         public DateTime DateOfBirth { get; set; }
 
-        public bool IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; } 
 
         /// <summary>
         /// Navigation property for the appointments related to this patient.

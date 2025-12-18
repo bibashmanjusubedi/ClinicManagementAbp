@@ -41,6 +41,12 @@ public class Program
                 });
             await builder.AddApplicationAsync<ClinicManagementAbpHttpApiHostModule>();
             var app = builder.Build();
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
             await app.InitializeApplicationAsync();
             await app.RunAsync();
             return 0;
