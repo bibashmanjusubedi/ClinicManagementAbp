@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Application.Dtos;
-using System.DayOfWeek;
 
 namespace ClinicManagementAbp.DoctorSchedules.Dtos
 {

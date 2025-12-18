@@ -8,6 +8,10 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.ObjectMapping;
+using Volo.Abp.Data;
+using Volo.Abp.Linq;
+
+
 
 namespace ClinicManagementAbp.Patients
 {
@@ -18,10 +22,9 @@ namespace ClinicManagementAbp.Patients
         private readonly IPatientRepository _patientRepository;
 
 
-        public PatientAppService(
-            IRepository<Patient,Guid>.Default repository,
-            IPatientRepository patientRepository)
-            : base(repository)
+        public PatientAppService(IPatientRepository patientRepository)
+            
+            : base(patientRepository)
         {
             _patientRepository = patientRepository;
         }
@@ -42,11 +45,12 @@ namespace ClinicManagementAbp.Patients
         {
             var queryable = await _patientRepository.WithDetailsAsync();
 
-            var totalCount = await AsyncExecuter.CountAsync(queryable);
 
-            queryable = queryable
-                .OrderBy(input.Sorting ?? "CreationTime desc")
-                .PageBy(input);
+            queryable = ApplySorting(queryable, input);
+            queryable = ApplyPaging(queryable, input);
+
+
+            var totalCount = await AsyncExecuter.CountAsync(queryable);
 
 
             var entities = await AsyncExecuter.ToListAsync(queryable);

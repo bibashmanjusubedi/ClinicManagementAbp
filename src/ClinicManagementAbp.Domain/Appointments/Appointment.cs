@@ -7,16 +7,6 @@ using Volo.Abp.Domain.Entities;
 namespace ClinicManagementAbp.Appointments
 {
     /// <summary>
-    /// Enumeration of the possible appointment statuses: Scheduled, Completed, Cancelled.
-    /// </summary>
-    public enum AppointmentStatus
-    {
-        Scheduled,
-        Completed,
-        Cancelled
-    }
-
-    /// <summary>
     /// Represents an appointment scheduled between a patient and a doctor.
     /// Contains appointment details such as date, description, and status.
     /// </summary>
