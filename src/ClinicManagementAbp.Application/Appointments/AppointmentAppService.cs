@@ -172,6 +172,29 @@ public class AppointmentAppService :
         );
     }
 
+    public override async Task<AppointmentDto> GetAsync(Guid id)
+    {
+        var appointment = await Repository.GetAsync(id);
+
+        if (appointment == null)
+        {
+            throw new UserFriendlyException($"Appointment with ID {id} does not exist.");
+        }
+
+        var dto = ObjectMapper.Map<Appointment, AppointmentDto>(appointment);
+
+        var doctor = await _doctorRepository.FindAsync(dto.DoctorId);
+        var patient = await _patientRepository.FindAsync(dto.PatientId);
+
+        dto.DoctorName = doctor?.FullName;
+        dto.PatientName = patient == null
+            ? null
+            : $"{patient.FirstName} {patient.LastName}";
+
+        return dto;
+    }
+
+
 
 }
 
