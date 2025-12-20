@@ -134,8 +134,9 @@ public class AppointmentAppService :
             throw new UserFriendlyException($"Only scheduled appointments can be canceled.");
         }
 
-        input.Status = AppointmentStatus.Cancelled;
+        appointment.Status = AppointmentStatus.Cancelled;
 
+        await Repository.UpdateAsync(appointment);
         await CurrentUnitOfWork.SaveChangesAsync();
     }
 
@@ -152,7 +153,10 @@ public class AppointmentAppService :
             throw new UserFriendlyException($"Only scheduled appointments can be marked as complete.");
         }
 
-        input.Status = AppointmentStatus.Completed;
+        appointment.Status = AppointmentStatus.Completed;
+
+
+        await Repository.UpdateAsync(appointment);
         await CurrentUnitOfWork.SaveChangesAsync();
 
     }
