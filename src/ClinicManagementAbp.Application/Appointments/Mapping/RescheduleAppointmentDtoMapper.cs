@@ -5,6 +5,15 @@ using Volo.Abp.ObjectMapping;
 
 public class RescheduleAppointmentDtoMapper : TwoWayMapperBase<Appointment, RescheduleAppointmentDto>
 {
+
+    public override RescheduleAppointmentDto Map(Appointment source) // Fixed return type
+    {
+        return new RescheduleAppointmentDto
+        {
+            NewDate = source.AppointmentDate,
+        };
+    }
+
     public override Appointment ReverseMap(RescheduleAppointmentDto source)
     {
         return new Appointment

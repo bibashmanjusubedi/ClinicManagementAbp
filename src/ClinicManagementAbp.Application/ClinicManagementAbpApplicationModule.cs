@@ -39,7 +39,7 @@ public class ClinicManagementAbpApplicationModule : AbpModule
         context.Services.AddTransient<DoctorCreateUpdateMapper>();
 
         //appointment mappers
-        context.Services.AddTransient<AppointmentCreateDtoMapper>();
+        context.Services.AddTransient<AppointmentCreateMapper>();
         context.Services.AddTransient<AppointmentToDtoMapper>();
         context.Services.AddTransient<AppointmentByDoctorIdDtoMapper>();
         context.Services.AddTransient<CancelAppointmentDtoMapper>();

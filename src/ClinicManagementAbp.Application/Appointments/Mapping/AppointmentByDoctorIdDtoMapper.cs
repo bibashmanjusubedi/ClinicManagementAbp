@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace ClinicManagementAbp.Appointments.Mapping;
 
-public class AppointmentByDoctorIdMapper : MapperBase<List<Appointment>, List<AppointmentByDoctorIdDto>>
+public class AppointmentByDoctorIdDtoMapper : MapperBase<List<Appointment>, List<AppointmentByDoctorIdDto>>
 {
     public override List<AppointmentByDoctorIdDto> Map(List<Appointment> source)
     {

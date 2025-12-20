@@ -53,7 +53,7 @@ public class AppointmentAppService :
             throw new UserFriendlyException($"Patient with ID {input.PatientId} does not exist.");
         }
 
-        appointment.Status = AppointmentStatus.Scheduled;
+        input.Status = AppointmentStatus.Scheduled;
 
         return await base.CreateAsync(input);
 
@@ -95,7 +95,7 @@ public class AppointmentAppService :
             throw new UserFriendlyException($"Only scheduled appointments can be canceled.");
         }
 
-        appointment.Status = AppointmentStatus.Cancelled;
+        input.Status = AppointmentStatus.Cancelled;
 
         await CurrentUnitOfWork.SaveChangesAsync();
     }
@@ -113,7 +113,7 @@ public class AppointmentAppService :
             throw new UserFriendlyException($"Only scheduled appointments can be marked as complete.");
         }
 
-        appointment.Status = AppointmentStatus.Completed;
+        input.Status = AppointmentStatus.Completed;
         await CurrentUnitOfWork.SaveChangesAsync();
 
     }

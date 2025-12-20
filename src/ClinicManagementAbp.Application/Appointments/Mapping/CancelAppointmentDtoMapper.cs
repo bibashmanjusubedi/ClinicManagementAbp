@@ -5,7 +5,7 @@ using Volo.Abp.ObjectMapping;
 
 namespace ClinicManagementAbp.Appointments.Mapping
 {
-    public class CancelAppointmentMapper : MapperBase<CancelAppointmentDto, Appointment>
+    public class CancelAppointmentDtoMapper : MapperBase<CancelAppointmentDto, Appointment>
     {
         public override Appointment Map(CancelAppointmentDto source)
         {
@@ -13,8 +13,8 @@ namespace ClinicManagementAbp.Appointments.Mapping
 
             return new Appointment
             {
-                Status = AppointmentStatus.Cancelled, // Hard-coded for cancel action
-                Description = source.CancellationReason // Store reason in description
+                Status = AppointmentStatus.Cancelled,
+                Description = source.CancellationReason
             };
         }
 

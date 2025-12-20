@@ -13,5 +13,7 @@ namespace ClinicManagementAbp.Appointments.Dtos
         /// </summary>
         [MaxLength(500)]
         public string? CompletionNotes { get; set; }
+
+        public AppointmentStatus Status { get; set; } = AppointmentStatus.Completed;
     }
 }

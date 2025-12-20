@@ -7,5 +7,7 @@ namespace ClinicManagementAbp.Appointments.Dtos
         [Required]
         [MaxLength(500)]
         public string CancellationReason { get; set; }
+
+        public AppointmentStatus Status { get; set; } = AppointmentStatus.Cancelled;
     }
 }

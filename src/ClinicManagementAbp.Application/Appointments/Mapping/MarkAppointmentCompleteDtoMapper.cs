@@ -5,7 +5,7 @@ using Volo.Abp.ObjectMapping;
 
 namespace ClinicManagementAbp.Appointments.Mapping
 {
-    public class MarkAppointmentCompleteMapper : MapperBase<MarkAppointmentCompleteDto, Appointment>
+    public class MarkAppointmentCompleteDtoMapper : MapperBase<MarkAppointmentCompleteDto, Appointment>
     {
         public override Appointment Map(MarkAppointmentCompleteDto source)
         {
@@ -14,7 +14,7 @@ namespace ClinicManagementAbp.Appointments.Mapping
             return new Appointment
             {
                 Status = AppointmentStatus.Completed,
-                Description = source.CompletionNotes // Store notes in description
+                Description = $"Completed: {source.CompletionNotes}" // Append  // Store notes in description
             };
         }
 
