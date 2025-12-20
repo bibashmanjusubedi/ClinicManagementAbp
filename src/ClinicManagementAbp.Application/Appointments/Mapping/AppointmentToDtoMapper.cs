@@ -17,7 +17,9 @@ public class AppointmentToDtoMapper : MapperBase<Appointment, AppointmentDto>
             DoctorId = source.DoctorId,
             PatientName = source.Patient?.FirstName + " " + source.Patient?.LastName, // if navigation property exists
             DoctorName = source.Doctor?.FullName,
-            AppointmentDate = source.AppointmentDate
+            AppointmentDate = source.AppointmentDate,
+            Description = source.Description,  // ← ADD THIS LINE
+            Status = source.Status
         };
     }
 
@@ -30,6 +32,8 @@ public class AppointmentToDtoMapper : MapperBase<Appointment, AppointmentDto>
         destination.PatientName = source.Patient?.FirstName + " " + source.Patient?.LastName;
         destination.DoctorName = source.Doctor?.FullName;
         destination.AppointmentDate = source.AppointmentDate;
+        destination.Description = source.Description;
+        destination.Status = source.Status;
     }
 }
 
