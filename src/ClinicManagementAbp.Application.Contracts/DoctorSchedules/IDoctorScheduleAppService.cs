@@ -13,6 +13,5 @@ public interface IDoctorScheduleAppService: ICrudAppService<
     CreateUpdateDoctorScheduleDto,
     CreateUpdateDoctorScheduleDto>
 {
-    Task<PagedResultDto<DoctorScheduleDto>> GetDoctorSchedulesByDoctorAsync(Guid doctorId, PagedAndSortedResultRequestDto input);
     Task<PagedResultDto<DoctorScheduleByDoctorDto>> GetDoctorSchedulesByDoctorIdAsync(Guid doctorId, PagedAndSortedResultRequestDto input);
 }
