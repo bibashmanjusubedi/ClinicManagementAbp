@@ -1,4 +1,6 @@
-﻿using ClinicManagementAbp.Patients;
+﻿using ClinicManagementAbp.Doctors;
+using ClinicManagementAbp.Doctors.Mapping;
+using ClinicManagementAbp.Patients;
 using ClinicManagementAbp.Patients.Mapping;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Account;
@@ -26,8 +28,13 @@ public class ClinicManagementAbpApplicationModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        //patient mappers
         context.Services.AddTransient<PatientToDtoMapper>();
         context.Services.AddTransient<PatientCreateUpdateMapper>();
+
+        //doctor mappers
+        context.Services.AddTransient<DoctorToDtoMapper>();
+        context.Services.AddTransient<DoctorCreateUpdateMapper>();
     }
 
 
