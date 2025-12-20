@@ -159,20 +159,27 @@ public class AppointmentAppService :
 
     public async Task RescheduleAsync(Guid id, RescheduleAppointmentDto input)
     {
+        // Fetch the appointment
         var appointment = await Repository.GetAsync(id);
         if (appointment == null)
         {
             throw new UserFriendlyException($"Appointment with ID {id} does not exist.");
         }
+
+        // Only scheduled appointments can be rescheduled
         if (appointment.Status != AppointmentStatus.Scheduled)
         {
             throw new UserFriendlyException($"Only scheduled appointments can be rescheduled.");
         }
 
-        appointment.Status = AppointmentStatus.Scheduled;
+        // Update the appointment date/time
+        appointment.AppointmentDate = input.NewDate; 
+        appointment.Status = AppointmentStatus.Scheduled; // keep it scheduled
 
+        await Repository.UpdateAsync(appointment);
         await CurrentUnitOfWork.SaveChangesAsync();
     }
+
 
     public override async Task<PagedResultDto<AppointmentDto>> GetListAsync(
     PagedAndSortedResultRequestDto input)
