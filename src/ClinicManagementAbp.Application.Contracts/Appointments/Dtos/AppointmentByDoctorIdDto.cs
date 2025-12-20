@@ -13,6 +13,8 @@ namespace ClinicManagementAbp.Appointments.Dtos
     {
         public Guid PatientId { get; set; }
         public string PatientName { get; set; }
+
+        public string DoctorName { get; set; }
         public DateTime AppointmentDate { get; set; }
         [MaxLength(500)]
         public string Description { get; set; }

@@ -59,26 +59,65 @@ public class AppointmentAppService :
 
     }
 
-    public async Task<AppointmentByDoctorIdDto> GetAppointmentsByDoctorIdAsync(Guid doctorId, PagedAndSortedResultRequestDto input)
+    public async Task<PagedResultDto<AppointmentByDoctorIdDto>> GetAppointmentsByDoctorIdAsync(
+     Guid doctorId,
+     PagedAndSortedResultRequestDto input)
     {
+        // Get the doctor
         var doctor = await _doctorRepository.GetAsync(doctorId);
-
         if (doctor == null)
         {
             throw new UserFriendlyException($"Doctor with ID {doctorId} does not exist.");
         }
 
+        // Get all appointments for this doctor
         var queryable = await Repository.GetQueryableAsync();
-
         queryable = queryable.Where(x => x.DoctorId == doctorId);
 
+        // Apply sorting and paging
         queryable = ApplySorting(queryable, input);
         queryable = ApplyPaging(queryable, input);
-        
+
+        // Execute the query
         var appointments = await AsyncExecuter.ToListAsync(queryable);
 
-        return ObjectMapper.Map<List<Appointment>, AppointmentByDoctorIdDto>(appointments);
+        // Get total count before paging
+        var totalCount = await AsyncExecuter.CountAsync(
+            (await Repository.GetQueryableAsync()).Where(x => x.DoctorId == doctorId)
+        );
+
+        // Manual mapping to DTO
+        var appointmentDtos = appointments.Select(a => new AppointmentByDoctorIdDto
+        {
+            Id = a.Id,
+            PatientId = a.PatientId,
+            DoctorName = doctor?.FullName,
+            AppointmentDate = a.AppointmentDate,
+            Description = a.Description,
+            Status = a.Status
+        }).ToList();
+
+        // Fill patient names
+        var patientIds = appointments.Select(a => a.PatientId).Distinct().ToList();
+        var patients = await _patientRepository.GetListAsync(p => patientIds.Contains(p.Id));
+
+        foreach (var dto in appointmentDtos)
+        {
+            var patient = patients.FirstOrDefault(p => p.Id == dto.PatientId);
+            dto.PatientName = patient == null ? null : $"{patient.FirstName} {patient.LastName}";
+        }
+
+        // Return paged result
+        return new PagedResultDto<AppointmentByDoctorIdDto>(
+            totalCount,
+            appointmentDtos
+        );
     }
+
+
+
+
+
 
     public async Task CancelAsync(Guid id, CancelAppointmentDto input)
     {

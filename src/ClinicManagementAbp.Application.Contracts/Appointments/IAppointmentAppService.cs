@@ -13,8 +13,12 @@ public interface  IAppointmentAppService: ICrudAppService<
     PagedAndSortedResultRequestDto,
     CreateAppointmentDto>
 {
-    Task<AppointmentByDoctorIdDto> GetAppointmentsByDoctorIdAsync(Guid doctorId, PagedAndSortedResultRequestDto input);
-    
+    Task<PagedResultDto<AppointmentByDoctorIdDto>>
+             GetAppointmentsByDoctorIdAsync(
+                 Guid doctorId,
+                 PagedAndSortedResultRequestDto input
+             );
+
     Task CancelAsync(Guid id,CancelAppointmentDto input);
     Task MarkAsCompleteAsync(Guid id, MarkAppointmentCompleteDto input);
 
