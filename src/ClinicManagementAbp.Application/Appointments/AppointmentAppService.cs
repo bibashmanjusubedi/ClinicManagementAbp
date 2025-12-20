@@ -135,6 +135,44 @@ public class AppointmentAppService :
         await CurrentUnitOfWork.SaveChangesAsync();
     }
 
+    public override async Task<PagedResultDto<AppointmentDto>> GetListAsync(
+    PagedAndSortedResultRequestDto input)
+    {
+        var query = await Repository.GetQueryableAsync();
+
+        query = ApplySorting(query, input);
+        query = ApplyPaging(query, input);
+
+        var appointments = await AsyncExecuter.ToListAsync(query);
+        var totalCount = await Repository.GetCountAsync();
+
+        var doctorIds = appointments.Select(a => a.DoctorId).Distinct().ToList();
+        var patientIds = appointments.Select(a => a.PatientId).Distinct().ToList();
+
+        var doctors = await _doctorRepository.GetListAsync(d => doctorIds.Contains(d.Id));
+        var patients = await _patientRepository.GetListAsync(p => patientIds.Contains(p.Id));
+
+        var appointmentDtos = ObjectMapper.Map<List<Appointment>, List<AppointmentDto>>(appointments);
+
+        foreach (var dto in appointmentDtos)
+        {
+            var doctor = doctors.FirstOrDefault(d => d.Id == dto.DoctorId);
+            var patient = patients.FirstOrDefault(p => p.Id == dto.PatientId);
+
+            dto.DoctorName = doctor?.FullName;
+            dto.PatientName = patient == null
+                ? null
+                : $"{patient.FirstName} {patient.LastName}";
+        }
+
+
+        return new PagedResultDto<AppointmentDto>(
+            totalCount,
+            appointmentDtos
+        );
+    }
+
+
 }
 
 
