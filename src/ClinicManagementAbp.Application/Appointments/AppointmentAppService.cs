@@ -53,6 +53,8 @@ public class AppointmentAppService :
             throw new UserFriendlyException($"Patient with ID {input.PatientId} does not exist.");
         }
 
+        appointment.Status = AppointmentStatus.Scheduled;
+
         return await base.CreateAsync(input);
 
     }
