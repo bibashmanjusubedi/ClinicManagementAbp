@@ -18,6 +18,10 @@ using Volo.Abp.Emailing;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.TenantManagement;
+using Volo.Abp.PermissionManagement;
+using Volo.Abp.Data;                
+using ClinicManagementAbp.Permissions;
+
 
 namespace ClinicManagementAbp;
 
@@ -43,6 +47,17 @@ public class ClinicManagementAbpDomainModule : AbpModule
         Configure<AbpMultiTenancyOptions>(options =>
         {
             options.IsEnabled = MultiTenancyConsts.IsEnabled;
+        });
+
+
+        Configure<PermissionManagementOptions>(options =>
+        {
+            options.DefinitionProviders.Add<ClinicManagementAbpPermissionDefinitionProvider>();
+        });
+
+        Configure<AbpDataSeedOptions>(options =>
+        {
+            options.SeedContributors.Add<ClinicManagementAbpDataSeedContributor>();
         });
 
 
