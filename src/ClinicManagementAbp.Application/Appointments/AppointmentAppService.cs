@@ -3,6 +3,8 @@ using ClinicManagementAbp.Appointments.Dtos;
 using ClinicManagementAbp.Doctors;
 using ClinicManagementAbp.Patients;
 using ClinicManagementAbp.Permissions;
+using ClinicManagementAbp.Permissions;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +13,7 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Linq;
@@ -36,6 +39,7 @@ public class AppointmentAppService :
         _patientRepository = patientRepository;
     }
 
+    [Authorize(ClinicManagementAbpPermissions.Appointments.Create)]
     public override async Task<AppointmentDto> CreateAsync(CreateAppointmentDto input)
     {
         var doctor = await _doctorRepository.GetAsync(input.DoctorId);
@@ -59,6 +63,7 @@ public class AppointmentAppService :
 
     }
 
+    [Authorize(ClinicManagementAbpPermissions.Appointments.ViewOwn)]
     public async Task<PagedResultDto<AppointmentByDoctorIdDto>> GetAppointmentsByDoctorIdAsync(
      Guid doctorId,
      PagedAndSortedResultRequestDto input)
@@ -118,7 +123,7 @@ public class AppointmentAppService :
 
 
 
-
+    [Authorize(ClinicManagementAbpPermissions.Appointments.Cancel)]
     public async Task CancelAsync(Guid id, CancelAppointmentDto input)
     {
         var appointment = await Repository.GetAsync(id);
@@ -141,6 +146,7 @@ public class AppointmentAppService :
     }
 
 
+    [Authorize(ClinicManagementAbpPermissions.Appointments.Complete)]
     public async Task MarkAsCompleteAsync(Guid id, MarkAppointmentCompleteDto input)
     {
         var appointment = await Repository.GetAsync(id);
@@ -161,6 +167,7 @@ public class AppointmentAppService :
 
     }
 
+    [Authorize(ClinicManagementAbpPermissions.Appointments.Reschedule)]
     public async Task RescheduleAsync(Guid id, RescheduleAppointmentDto input)
     {
         // Fetch the appointment
@@ -185,6 +192,7 @@ public class AppointmentAppService :
     }
 
 
+    [Authorize(ClinicManagementAbpPermissions.Appointments.ViewAll)]
     public override async Task<PagedResultDto<AppointmentDto>> GetListAsync(
     PagedAndSortedResultRequestDto input)
     {
@@ -222,6 +230,8 @@ public class AppointmentAppService :
         );
     }
 
+
+    [Authorize(ClinicManagementAbpPermissions.Appointments.ViewOne)]
     public override async Task<AppointmentDto> GetAsync(Guid id)
     {
         var appointment = await Repository.GetAsync(id);
@@ -242,6 +252,13 @@ public class AppointmentAppService :
             : $"{patient.FirstName} {patient.LastName}";
 
         return dto;
+    }
+
+
+    [Authorize(ClinicManagementAbpPermissions.Appointments.Delete)]
+    public override async Task DeleteAsync(Guid id)
+    {
+        await base.DeleteAsync(id);
     }
 
 

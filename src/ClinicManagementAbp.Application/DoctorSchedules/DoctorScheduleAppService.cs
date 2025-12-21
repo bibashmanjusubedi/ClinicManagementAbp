@@ -1,15 +1,18 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Volo.Abp.Application.Services;
-using Volo.Abp.Domain.Repositories;
-using ClinicManagementAbp.DoctorSchedules;
+﻿using ClinicManagementAbp.DoctorSchedules;
 using ClinicManagementAbp.DoctorSchedules.Dtos;
 using ClinicManagementAbp.Permissions;
-using Volo.Abp.Application.Dtos;
+using ClinicManagementAbp.Permissions;
+using Microsoft.AspNetCore.Authorization;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Domain.Repositories;
 
-namespace ClinicMAnagementAbp.DoctorSchedules;
+namespace ClinicManagementAbp.DoctorSchedules;
 
 
 public class DoctorScheduleAppService: CrudAppService<DoctorSchedule,DoctorScheduleDto,Guid,PagedAndSortedResultRequestDto,CreateUpdateDoctorScheduleDto,CreateUpdateDoctorScheduleDto>,IDoctorScheduleAppService
@@ -19,6 +22,7 @@ public class DoctorScheduleAppService: CrudAppService<DoctorSchedule,DoctorSched
     }
 
 
+    [Authorize(ClinicManagementAbpPermissions.DoctorSchedules.ViewOwn)]
     public async Task<PagedResultDto<DoctorScheduleByDoctorDto>> GetDoctorSchedulesByDoctorIdAsync(
      Guid doctorId, PagedAndSortedResultRequestDto input)
     {
@@ -37,7 +41,7 @@ public class DoctorScheduleAppService: CrudAppService<DoctorSchedule,DoctorSched
     }
 
 
-
+    [Authorize(ClinicManagementAbpPermissions.DoctorSchedules.Create)]
     public override async Task<DoctorScheduleDto> CreateAsync(CreateUpdateDoctorScheduleDto input)
     {
         var entity = ObjectMapper.Map<CreateUpdateDoctorScheduleDto, DoctorSchedule>(input);
@@ -56,6 +60,7 @@ public class DoctorScheduleAppService: CrudAppService<DoctorSchedule,DoctorSched
     }
 
 
+    [Authorize(ClinicManagementAbpPermissions.DoctorSchedules.Edit)]
     public override async Task<DoctorScheduleDto> UpdateAsync( Guid id, CreateUpdateDoctorScheduleDto input)
     {
         // 1️⃣ Get existing entity
@@ -78,7 +83,7 @@ public class DoctorScheduleAppService: CrudAppService<DoctorSchedule,DoctorSched
         return ObjectMapper.Map<DoctorSchedule, DoctorScheduleDto>(scheduleWithDoctor);
     }
 
-
+    [Authorize(ClinicManagementAbpPermissions.DoctorSchedules.ViewAll)]
     public override async Task<PagedResultDto<DoctorScheduleDto>> GetListAsync(
      PagedAndSortedResultRequestDto input)
     {
@@ -96,7 +101,7 @@ public class DoctorScheduleAppService: CrudAppService<DoctorSchedule,DoctorSched
     }
 
 
-
+    [Authorize(ClinicManagementAbpPermissions.DoctorSchedules.ViewOne)]
     public override async Task<DoctorScheduleDto> GetAsync(Guid id)
     {
         var query = await Repository.WithDetailsAsync(x => x.Doctor);
@@ -106,6 +111,13 @@ public class DoctorScheduleAppService: CrudAppService<DoctorSchedule,DoctorSched
             );
 
         return ObjectMapper.Map<DoctorSchedule, DoctorScheduleDto>(entity);
+    }
+
+
+    [Authorize(ClinicManagementAbpPermissions.DoctorSchedules.Delete)]
+    public override async Task DeleteAsync(Guid id)
+    {
+        await base.DeleteAsync(id);
     }
 
 
