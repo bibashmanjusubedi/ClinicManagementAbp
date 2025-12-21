@@ -38,4 +38,23 @@ public class DoctorScheduleAppService: CrudAppService<DoctorSchedule,DoctorSched
 
     }
 
+
+    public override async Task<DoctorScheduleDto> CreateAsync(CreateUpdateDoctorScheduleDto input)
+    {
+        var entity = ObjectMapper.Map<CreateUpdateDoctorScheduleDto, DoctorSchedule>(input);
+
+        await Repository.InsertAsync(entity, autoSave: true);
+
+        // 👇 RELOAD with navigation property
+        var queryable = await Repository.WithDetailsAsync(x => x.Doctor);
+
+        var scheduleWithDoctor = await AsyncExecuter.FirstAsync(
+            queryable.Where(x => x.Id == entity.Id)
+        );
+
+        return ObjectMapper.Map<DoctorSchedule, DoctorScheduleDto>(scheduleWithDoctor);
+
+    }
+
+
 }
