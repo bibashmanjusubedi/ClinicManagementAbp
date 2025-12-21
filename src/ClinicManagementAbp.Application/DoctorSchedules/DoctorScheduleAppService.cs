@@ -80,4 +80,36 @@ public class DoctorScheduleAppService: CrudAppService<DoctorSchedule,DoctorSched
     }
 
 
+    public override async Task<PagedResultDto<DoctorScheduleDto>> GetListAsync(
+     PagedAndSortedResultRequestDto input)
+    {
+        var query = await Repository.WithDetailsAsync(x => x.Doctor);
+
+        query = ApplySorting(query, input);
+        query = ApplyPaging(query, input);
+
+        var totalCount = await AsyncExecuter.CountAsync(query);
+        var entities = await AsyncExecuter.ToListAsync(query);
+
+        var dtos = ObjectMapper.Map<List<DoctorSchedule>, List<DoctorScheduleDto>>(entities);
+
+        return new PagedResultDto<DoctorScheduleDto>(totalCount, dtos);
+    }
+
+
+
+    public override async Task<DoctorScheduleDto> GetAsync(Guid id)
+    {
+        var query = await Repository.WithDetailsAsync(x => x.Doctor);
+
+        var entity = await AsyncExecuter.FirstAsync(
+            query.Where(x => x.Id == id)
+            );
+
+        return ObjectMapper.Map<DoctorSchedule, DoctorScheduleDto>(entity);
+    }
+
+
+
+
 }
