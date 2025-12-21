@@ -19,24 +19,23 @@ public class DoctorScheduleAppService: CrudAppService<DoctorSchedule,DoctorSched
     }
 
 
-    public async Task<PagedResultDto<DoctorScheduleByDoctorDto>> GetDoctorSchedulesByDoctorIdAsync(Guid doctorId,PagedAndSortedResultRequestDto input)
+    public async Task<PagedResultDto<DoctorScheduleByDoctorDto>> GetDoctorSchedulesByDoctorIdAsync(
+     Guid doctorId, PagedAndSortedResultRequestDto input)
     {
-        var query= await Repository.GetQueryableAsync();
-        
+        var query = await Repository.WithDetailsAsync(x => x.Doctor);
         query = query.Where(s => s.DoctorId == doctorId);
 
         var totalCount = await AsyncExecuter.CountAsync(query);
 
         var entities = await AsyncExecuter.ToListAsync(
-              query.PageBy(input.SkipCount, input.MaxResultCount)
+            query.PageBy(input.SkipCount, input.MaxResultCount)
         );
-
 
         var dtos = ObjectMapper.Map<List<DoctorSchedule>, List<DoctorScheduleByDoctorDto>>(entities);
 
         return new PagedResultDto<DoctorScheduleByDoctorDto>(totalCount, dtos);
-
     }
+
 
 
     public override async Task<DoctorScheduleDto> CreateAsync(CreateUpdateDoctorScheduleDto input)
@@ -108,6 +107,8 @@ public class DoctorScheduleAppService: CrudAppService<DoctorSchedule,DoctorSched
 
         return ObjectMapper.Map<DoctorSchedule, DoctorScheduleDto>(entity);
     }
+
+
 
 
 
