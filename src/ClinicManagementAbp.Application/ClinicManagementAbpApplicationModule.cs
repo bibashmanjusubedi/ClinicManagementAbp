@@ -1,7 +1,9 @@
-﻿using ClinicManagementAbp.Appointments.Mapping;
-using ClinicManagementAbp.Appointments;
+﻿using ClinicManagementAbp.Appointments;
+using ClinicManagementAbp.Appointments.Mapping;
 using ClinicManagementAbp.Doctors;
 using ClinicManagementAbp.Doctors.Mapping;
+using ClinicManagementAbp.DoctorSchedules;
+using ClinicManagementAbp.DoctorSchedules.Mapping;
 using ClinicManagementAbp.Patients;
 using ClinicManagementAbp.Patients.Mapping;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,6 +47,13 @@ public class ClinicManagementAbpApplicationModule : AbpModule
         context.Services.AddTransient<CancelAppointmentDtoMapper>();
         context.Services.AddTransient<MarkAppointmentCompleteDtoMapper>();
         context.Services.AddTransient<RescheduleAppointmentDtoMapper>();
+
+        // doctor schedule mappers
+        context.Services.AddTransient<DoctorScheduleCreateUpdateMapper>();
+        context.Services.AddTransient<DoctorScheduleToDtoMapper>();
+        context.Services.AddTransient<DoctorScheduleByDoctorDtoMapper>();
+
+
     }
 
 
