@@ -51,4 +51,11 @@ public static class ClinicManagementAbpPermissions
     }
 
 
+    public static class Identity
+    {
+        public const string ManageRoles = GroupName + ".Identity.ManageRoles";
+        public const string CreateUsers = GroupName + ".Identity.CreateUsers";
+    }
+
+
 }

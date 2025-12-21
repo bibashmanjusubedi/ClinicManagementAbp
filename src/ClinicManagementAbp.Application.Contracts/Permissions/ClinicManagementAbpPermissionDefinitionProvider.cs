@@ -50,6 +50,12 @@ public class ClinicManagementAbpPermissionDefinitionProvider : PermissionDefinit
         schedulesPermission.AddChild(ClinicManagementAbpPermissions.DoctorSchedules.ViewOne, L("DoctorSchedules.ViewOne"));
         schedulesPermission.AddChild(ClinicManagementAbpPermissions.DoctorSchedules.ViewOwn, L("DoctorSchedules.ViewOwn"));
 
+
+        var identityGroup = clinicGroup.AddGroup("Identity", L("IdentityManagement"));
+        identityGroup.AddPermission(ClinicManagementAbpPermissions.Identity.ManageRoles, L("ManageRoles"));
+        identityGroup.AddPermission(ClinicManagementAbpPermissions.Identity.CreateUsers, L("CreateUsers"));
+
+
     }
 
     private static LocalizableString L(string name)
