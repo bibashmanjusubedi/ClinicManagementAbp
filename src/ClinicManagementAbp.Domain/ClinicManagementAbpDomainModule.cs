@@ -1,28 +1,21 @@
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using ClinicManagementAbp.Localization;
-using ClinicManagementAbp.MultiTenancy;
-using System;
-using Volo.Abp.Localization;
-using Volo.Abp.Modularity;
-using Volo.Abp.MultiTenancy;
-using Volo.Abp.PermissionManagement.Identity;
-using Volo.Abp.SettingManagement;
-using Volo.Abp.BlobStoring.Database;
-using Volo.Abp.Caching;
-using Volo.Abp.OpenIddict;
-using Volo.Abp.PermissionManagement.OpenIddict;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.BlobStoring.Database;
+using Volo.Abp.Caching;
 using Volo.Abp.Emailing;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
-using Volo.Abp.TenantManagement;
+using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.OpenIddict;
 using Volo.Abp.PermissionManagement;
-using Volo.Abp.Data;                
-using ClinicManagementAbp.Permissions;
-using Volo.Abp.EntityFrameworkCore;
-
+using Volo.Abp.PermissionManagement.Identity;
+using Volo.Abp.PermissionManagement.OpenIddict;
+using Volo.Abp.SettingManagement;
+using Volo.Abp.TenantManagement;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using ClinicManagementAbp.MultiTenancy;
 
 namespace ClinicManagementAbp;
 
@@ -41,7 +34,7 @@ namespace ClinicManagementAbp;
     typeof(AbpTenantManagementDomainModule),
     typeof(BlobStoringDatabaseDomainModule),
     typeof(AbpPermissionManagementDomainModule)
-    )]
+)]
 public class ClinicManagementAbpDomainModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -51,25 +44,10 @@ public class ClinicManagementAbpDomainModule : AbpModule
             options.IsEnabled = MultiTenancyConsts.IsEnabled;
         });
 
-
-        Configure<PermissionManagementOptions>(options =>
-        {
-            options.DefinitionProviders.Add<ClinicManagementAbpPermissionDefinitionProvider>();
-        });
-
-        Configure<AbpDbContextOptions>(options =>
-        {
-            options.PreConfigure<ClinicManagementAbpDbContext>(dbContextConfigurationContext =>
-            {
-                dbContextConfigurationContext.DbContextOptions.SeedContributors.Add<ClinicManagementAbpDataSeedContributor>();
-            });
-        });
-
-
-
-
 #if DEBUG
-        context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
+        context.Services.Replace(
+            ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>()
+        );
 #endif
     }
 }

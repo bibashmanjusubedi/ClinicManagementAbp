@@ -12,8 +12,6 @@ public class ClinicManagementAbpPermissionDefinitionProvider : PermissionDefinit
 {
     public override void Define(IPermissionDefinitionContext context)
     {
-        var myGroup = context.AddGroup(ClinicManagementAbpPermissions.GroupName);
-
         //Define your own permissions here. Example:
         //myGroup.AddPermission(ClinicManagementAbpPermissions.MyPermission1, L("Permission:MyPermission1"));
         var clinicGroup = context.AddGroup(ClinicManagementAbpPermissions.GroupName, L("ClinicManagement"));
