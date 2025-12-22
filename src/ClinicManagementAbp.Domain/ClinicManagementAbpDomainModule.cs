@@ -21,6 +21,7 @@ using Volo.Abp.TenantManagement;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Data;                
 using ClinicManagementAbp.Permissions;
+using Volo.Abp.EntityFrameworkCore;
 
 
 namespace ClinicManagementAbp;
@@ -38,7 +39,8 @@ namespace ClinicManagementAbp;
     typeof(AbpIdentityDomainModule),
     typeof(AbpOpenIddictDomainModule),
     typeof(AbpTenantManagementDomainModule),
-    typeof(BlobStoringDatabaseDomainModule)
+    typeof(BlobStoringDatabaseDomainModule),
+    typeof(AbpPermissionManagementDomainModule)
     )]
 public class ClinicManagementAbpDomainModule : AbpModule
 {
@@ -55,10 +57,14 @@ public class ClinicManagementAbpDomainModule : AbpModule
             options.DefinitionProviders.Add<ClinicManagementAbpPermissionDefinitionProvider>();
         });
 
-        Configure<AbpDataSeedOptions>(options =>
+        Configure<AbpDbContextOptions>(options =>
         {
-            options.SeedContributors.Add<ClinicManagementAbpDataSeedContributor>();
+            options.PreConfigure<ClinicManagementAbpDbContext>(dbContextConfigurationContext =>
+            {
+                dbContextConfigurationContext.DbContextOptions.SeedContributors.Add<ClinicManagementAbpDataSeedContributor>();
+            });
         });
+
 
 
 
