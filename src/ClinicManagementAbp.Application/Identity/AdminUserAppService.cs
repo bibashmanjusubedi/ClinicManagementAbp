@@ -1,6 +1,8 @@
-﻿using ClinicManagementAbp.Permissions;
+﻿using ClinicManagementAbp.Identity.Dtos;
+using ClinicManagementAbp.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Services;
@@ -8,7 +10,6 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Guids;
 using Volo.Abp.Identity;
 using Volo.Abp.ObjectMapping;
-using ClinicManagementAbp.Identity.Dtos;
 
 namespace ClinicManagementAbp.Identity;
 
@@ -17,13 +18,16 @@ public class AdminUserAppService : ApplicationService, IAdminUserAppService
 {
     private readonly IdentityUserManager _userManager;
     private readonly IdentityRoleManager _roleManager;
+    private readonly IGuidGenerator _guidGenerator;
 
     public AdminUserAppService(
         IdentityUserManager userManager,
-        IdentityRoleManager roleManager)
+        IdentityRoleManager roleManager,
+         IGuidGenerator guidGenerator)
     {
         _userManager = userManager;
         _roleManager = roleManager;
+        _guidGenerator = guidGenerator;
     }
 
     [Authorize(ClinicManagementAbpPermissions.Identity.CreateUsers)]
@@ -38,20 +42,32 @@ public class AdminUserAppService : ApplicationService, IAdminUserAppService
             throw new UserFriendlyException($"Role '{roleName}' does not exist.");
         }
 
-        var user = await _userManager.CreateAsync(
-            new IdentityUser(GuidGenerator.Instance.Create(), input.UserName, input.Email),
-            input.Password
-        );
+        // 1️⃣ Create the user object
+        var newUser = new IdentityUser(_guidGenerator.Create(), input.UserName, input.Email);
 
-        user.EmailConfirmed = true;
-        user.IsActive = true;
-        await _userManager.UpdateAsync(user);
+        // 2️⃣ Set properties on the user
+        newUser.SetIsActive(true);
+        newUser.SetEmailConfirmed(true); // ✅ ABP method to confirm email
 
-        // Assign selected role (default: Receptionist)
-        await _userManager.AddToRoleAsync(user, roleName);
+        // 3️⃣ Create the user in the database with password
+        var result = await _userManager.CreateAsync(newUser, input.Password);
+        if (!result.Succeeded)
+        {
+            throw new UserFriendlyException(
+                $"Failed to create user: {string.Join(", ", result.Errors.Select(e => e.Description))}"
+            );
+        }
 
-        return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
+        // 4️⃣ Assign the role
+        await _userManager.AddToRoleAsync(newUser, roleName);
+
+        // 5️⃣ Map to DTO
+        return ObjectMapper.Map<IdentityUser, IdentityUserDto>(newUser);
     }
+
+
+
+
 
     [Authorize(ClinicManagementAbpPermissions.Identity.ManageRoles)]
     public async Task UpdateUserRolesAsync(Guid userId, UpdateUserRolesDto input)
