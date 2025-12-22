@@ -13,7 +13,6 @@ using ClinicManagementAbp.Identity.Dtos;
 namespace ClinicManagementAbp.Identity;
 
 
-[Authorize(ClinicManagementAbpPermissions.Identity.ManageRoles)]
 public class AdminUserAppService : ApplicationService, IAdminUserAppService
 {
     private readonly IdentityUserManager _userManager;
@@ -27,6 +26,7 @@ public class AdminUserAppService : ApplicationService, IAdminUserAppService
         _roleManager = roleManager;
     }
 
+    [Authorize(ClinicManagementAbpPermissions.Identity.CreateUsers)]
     public async Task<IdentityUserDto> CreateUserAsync(CreateUserDto input)
     {
         // Default to Receptionist if no role specified
@@ -53,6 +53,7 @@ public class AdminUserAppService : ApplicationService, IAdminUserAppService
         return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
     }
 
+    [Authorize(ClinicManagementAbpPermissions.Identity.ManageRoles)]
     public async Task UpdateUserRolesAsync(Guid userId, UpdateUserRolesDto input)
     {
         var user = await _userManager.FindByIdAsync(userId.ToString());
