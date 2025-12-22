@@ -8,10 +8,11 @@ using Volo.Abp.Guids;
 using Volo.Abp.Identity;
 using Volo.Abp.PermissionManagement;
 using ClinicManagementAbp.Permissions;
+using Volo.Abp.DependencyInjection;
 
+namespace ClinicManagementAbp.OpenIddict;
 
-
-public class ClinicManagementAbpDataSeedContributor : IDataSeedContributor
+public class ClinicManagementAbpDataSeedContributor : IDataSeedContributor,ITransientDependency
 {
     private readonly IRepository<IdentityRole, Guid> _roleRepository;
     private readonly IRepository<IdentityUser, Guid> _userRepository;
@@ -106,7 +107,7 @@ public class ClinicManagementAbpDataSeedContributor : IDataSeedContributor
         {
             role = new IdentityRole(_guidGenerator.Create(), roleName);
             await _roleManager.CreateAsync(role);  // Validates and creates
-            await _roleRepository.InsertAsync(role);  // Persists to DB
+            //await _roleRepository.InsertAsync(role);  // Persists to DB
         }
         return role;
     }

@@ -1,8 +1,10 @@
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.BlobStoring.Database;
 using Volo.Abp.Caching;
+using Volo.Abp.Data;
 using Volo.Abp.Emailing;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
@@ -14,8 +16,8 @@ using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.OpenIddict;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using ClinicManagementAbp.MultiTenancy;
+using ClinicManagementAbp.OpenIddict;
 
 namespace ClinicManagementAbp;
 
