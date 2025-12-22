@@ -4,6 +4,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.Authorization.Permissions;
+using ClinicManagementAbp.Permissions;
 
 namespace ClinicManagementAbp.Permissions;
 
@@ -51,7 +52,7 @@ public class ClinicManagementAbpPermissionDefinitionProvider : PermissionDefinit
         schedulesPermission.AddChild(ClinicManagementAbpPermissions.DoctorSchedules.ViewOwn, L("DoctorSchedules.ViewOwn"));
 
 
-        var identityGroup = clinicGroup.AddGroup("Identity", L("IdentityManagement"));
+        var identityGroup = context.AddGroup("Identity", L("IdentityManagement"));
         identityGroup.AddPermission(ClinicManagementAbpPermissions.Identity.ManageRoles, L("ManageRoles"));
         identityGroup.AddPermission(ClinicManagementAbpPermissions.Identity.CreateUsers, L("CreateUsers"));
 

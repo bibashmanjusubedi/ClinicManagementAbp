@@ -1,34 +1,40 @@
 ﻿using System;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Guids;
 using Volo.Abp.Identity;
-using static Volo.Abp.Identity.Settings.IdentitySettingNames;
 using Volo.Abp.PermissionManagement;
+using ClinicManagementAbp.Permissions;
+
 
 
 public class ClinicManagementAbpDataSeedContributor : IDataSeedContributor
 {
-    private readonly IRepository<Role, Guid> _roleRepository;
-    private readonly IRepository<User, Guid> _userRepository;
+    private readonly IRepository<IdentityRole, Guid> _roleRepository;
+    private readonly IRepository<IdentityUser, Guid> _userRepository;
     private readonly IdentityUserManager _userManager;
     private readonly IdentityRoleManager _roleManager;
-    private readonly IPermissionGrantRepository _permissionGrantRepository; 
+    private readonly IPermissionManager _permissionManager;
+    private readonly IGuidGenerator _guidGenerator;
+
 
     public ClinicManagementAbpDataSeedContributor(
-        IRepository<Role, Guid> roleRepository,
-        IRepository<User, Guid> userRepository,
+        IRepository<IdentityRole, Guid> roleRepository,
+        IRepository<IdentityUser, Guid> userRepository,
         IdentityUserManager userManager,
         IdentityRoleManager roleManager,
-        IPermissionGrantRepository permissionGrantRepository)
+        IPermissionManager permissionManager,
+        IGuidGenerator guidGenerator)
     {
         _roleRepository = roleRepository;
         _userRepository = userRepository;
         _userManager = userManager;
         _roleManager = roleManager;
-        _permissionGrantRepository = permissionGrantRepository;
+        _permissionManager = permissionManager;
+        _guidGenerator = guidGenerator;
     }
 
     public async Task SeedAsync(DataSeedContext context)
@@ -53,14 +59,13 @@ public class ClinicManagementAbpDataSeedContributor : IDataSeedContributor
             ClinicManagementAbpPermissions.Doctors.ViewAll,
             ClinicManagementAbpPermissions.Doctors.ViewOne,
             ClinicManagementAbpPermissions.Appointments.Create,
-            ClinicManagementAbpPermissions.Appointments.Edit,
             ClinicManagementAbpPermissions.Appointments.Delete,
             ClinicManagementAbpPermissions.Appointments.ViewAll,
             ClinicManagementAbpPermissions.Appointments.ViewOne,
             ClinicManagementAbpPermissions.Appointments.ViewOwn,
             ClinicManagementAbpPermissions.Appointments.Complete,
-            ClinicManagementAbpPermissions.DoctorSchedules.Cancel,
-            ClinicManagementAbpPermissions.DoctorSchedules.Reschedule,
+            ClinicManagementAbpPermissions.Appointments.Cancel,
+            ClinicManagementAbpPermissions.Appointments.Reschedule,
             ClinicManagementAbpPermissions.DoctorSchedules.Create,
             ClinicManagementAbpPermissions.DoctorSchedules.Edit,
             ClinicManagementAbpPermissions.DoctorSchedules.Delete,
@@ -94,61 +99,61 @@ public class ClinicManagementAbpDataSeedContributor : IDataSeedContributor
         await CreateUserIfNotExistsAsync("admin@clinic.com", "Admin123!", new[] { "Admin" });
     }
 
-    private async Task<Role> CreateRoleIfNotExistsAsync(string roleName)
+    private async Task<IdentityRole> CreateRoleIfNotExistsAsync(string roleName)
     {
         var role = await _roleRepository.FirstOrDefaultAsync(r => r.Name == roleName);
         if (role == null)
         {
-            role = await _roleManager.CreateAsync(new IdentityRole(GuidGenerator.Instance.Create(), roleName));
-            await _roleRepository.InsertAsync(role);
+            role = new IdentityRole(_guidGenerator.Create(), roleName);
+            await _roleManager.CreateAsync(role);  // Validates and creates
+            await _roleRepository.InsertAsync(role);  // Persists to DB
         }
         return role;
     }
 
-    private async Task AssignPermissionsToRoleAsync(Role role, string[] permissions)// what should be in here
+    private async Task AssignPermissionsToRoleAsync(IdentityRole role, string[] permissions)
     {
-        // Use IPermissionGrantRepository to assign permissions
-        // Implementation details depend on your ABP version
         foreach (var permission in permissions)
         {
-            var existingGrant = await _permissionGrantRepository.FirstOrDefaultAsync(x =>
-                x.HolderId == role.Id &&
-                x.HolderType == "role" &&
-                x.Name == permission);
-
-            if (existingGrant == null)
-            {
-                var permissionGrant = new PermissionGrant(
-                    GuidGenerator.Instance.Create(),
-                    permission,
-                    role.Id,
-                    "role"
-                );
-                await _permissionGrantRepository.InsertAsync(permissionGrant);
-            }
+            await _permissionManager.SetForRoleAsync(role.Name!, permission, true);
         }
-
     }
 
     private async Task CreateUserIfNotExistsAsync(string email, string password, string[] roles)
     {
         var user = await _userManager.FindByEmailAsync(email);
+
         if (user == null)
         {
-            user = await _userManager.CreateAsync(
-                new User(GuidGenerator.Instance.Create(), email, email)
-                {
-                    IsActive = true
-                }, password);
+            var newUser = new IdentityUser(
+                _guidGenerator.Create(),
+                email,
+                email
+            );
+
+            var result = await _userManager.CreateAsync(newUser, password);
+
+            if (!result.Succeeded)
+            {
+                throw new Exception(
+                    $"Failed to create user {email}: {string.Join(", ", result.Errors.Select(e => e.Description))}"
+                );
+            }
+
+            // Now the user exists
+            newUser.SetIsActive(true);
+            await _userRepository.UpdateAsync(newUser);
 
             foreach (var roleName in roles)
             {
                 var role = await _roleManager.FindByNameAsync(roleName);
                 if (role != null)
                 {
-                    await _userManager.AddToRoleAsync(user, role.Name!);
+                    await _userManager.AddToRoleAsync(newUser, role.Name!);
                 }
             }
         }
     }
+
+
 }

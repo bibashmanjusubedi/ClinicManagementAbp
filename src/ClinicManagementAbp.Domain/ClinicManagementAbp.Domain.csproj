@@ -14,7 +14,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ClinicManagementAbp.Domain.Shared\ClinicManagementAbp.Domain.Shared.csproj" />
-  </ItemGroup>
+		<ProjectReference Include="..\ClinicManagementAbp.Application.Contracts\ClinicManagementAbp.Application.Contracts.csproj" />
+	</ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Volo.Abp.Emailing" Version="10.0.1" />
